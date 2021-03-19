@@ -1,0 +1,23 @@
+{
+    "name": "lol-profile-editor",
+    "version": "1.0.0",
+    "dependencies": {
+        "@types/node-fetch": "^2.5.8",
+        "@types/react": "^17.0.3",
+        "fs-extra": "^9.1.0",
+        "node-fetch": "^2.6.1",
+        "react": "^17.0.1"
+    },
+    "devDependencies": {},
+    "scripts": {
+        "build-client": "tsc --project client \n node scripts/client_buildscript.js",
+        "build-server": "tsc --project server",
+        "cleanup": "rm -rf build",
+        "start": "node build/server/main.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/iahuang/lol-profile-editor.git"
+    },
+    "author": ""
+}

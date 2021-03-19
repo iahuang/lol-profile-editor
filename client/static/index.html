@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" href="/favicon.ico" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.2/require.min.js"></script>
+    </head>
+    <body>
+        <div id="root"></div>
+    </body>
+    <script>
+        requirejs.config({
+            paths: {
+                react: "https://unpkg.com/react@15.3.2/dist/react",
+                "react-dom": "https://unpkg.com/react-dom@15.3.2/dist/react-dom",
+            },
+        });
+    </script>
+    <script src="bundle.js"></script>
+    <script>
+        requirejs(["app"]);
+        requirejs(["react", "react-dom"], function (React, ReactDOM) {
+            ReactDOM.render(new window.client_AppConstructor(), document.getElementById("root"));
+        });
+    </script>
+</html>
