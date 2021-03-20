@@ -65,6 +65,17 @@ export class ChampionBackgroundSelector extends Component<IProps, IState> {
         }
         return (
             <div>
+                <span className="back-btn-container">
+                    <button
+                        onClick={() => {
+                            this.setState({
+                                selectingSkinFor: null,
+                            });
+                        }}
+                    >
+                        Back
+                    </button>
+                </span>
                 {this.state.skins.map((skin: any) => {
                     return (
                         <div key={skin.skinId}>
@@ -92,7 +103,7 @@ export class ChampionBackgroundSelector extends Component<IProps, IState> {
         return (
             <div>
                 <h2>Choose a Profile Background</h2>
-                <div className="sr-champ-display">
+                <div className="profile-selector-display">
                     {this.state.selectingSkinFor === null
                         ? this.makeChampSelectDisplay()
                         : this.makeSkinSelectDisplay()}

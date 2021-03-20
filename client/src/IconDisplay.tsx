@@ -19,7 +19,7 @@ export class IconDisplay extends Component<IProps, IState> {
         return (
             <div>
                 <h2>Choose a Profile Picture</h2>
-                <div className="sr-icon-display">{this.props.icons.map((icon) => this.makeIcon(icon))}</div>
+                <div className="profile-selector-display">{this.props.icons.map((icon) => this.makeIcon(icon))}</div>
             </div>
         );
     }

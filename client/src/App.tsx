@@ -60,6 +60,10 @@ class AppMain extends Component<IProps, IState> {
                         champs: data,
                     });
                 });
+            } else {
+                this.setState({
+                    loading: false
+                })
             }
         });
     }
@@ -103,6 +107,7 @@ class AppMain extends Component<IProps, IState> {
             <div>
                 {this.makeHeader()}
                 <div className="main">{this.makeMain()}</div>
+                <span className="disclaimer">This site is not affiliated with or endorsed by Riot Games or any of its subsidaries. League of Legends is a registered trademark of Riot Games Inc. Use at your own risk.</span>
             </div>
         );
     }
