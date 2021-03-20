@@ -1,5 +1,103 @@
-import React from "react";
+import React, { Component } from "react";
+import { Globals } from "./globals";
+import { IconDisplay } from "./IconDisplay";
+import { SummonerIcon } from "./types";
+
+interface IState {
+    loggedIn: boolean;
+    loading: boolean;
+    pfp: string;
+    icons: SummonerIcon[];
+}
+
+interface IProps {}
+
+class AppMain extends Component<IProps, IState> {
+    summonerInfo: any;
+    constructor(props: IState) {
+        super(props);
+        this.state = {
+            loggedIn: false,
+            loading: true,
+            pfp: "",
+            icons: [],
+        };
+
+        Globals.server.apiGET("/api/is-logged-in").then((data) => {
+            this.setState({
+                loggedIn: data.loggedIn,
+            });
+
+            if (data.loggedIn) {
+                Globals.server.apiGET("/api/summoner-info").then((data) => {
+                    console.log(data);
+                    this.summonerInfo = data;
+
+                    this.setState({
+                        loading: false,
+                    });
+
+                    Globals.server
+                        .apiGET("/api/summoner-icon-url", { id: this.summonerInfo.profileIconId })
+                        .then((data) => {
+                            this.setState({
+                                pfp: data.url,
+                            });
+                        });
+                });
+
+                Globals.server.apiGET("/api/summoner-icons").then((data) => {
+                    this.setState({
+                        icons: data.urls,
+                    });
+                    
+                    console.log(data);
+                });
+            }
+        });
+    }
+
+    makeHeader() {
+        return (
+            <div className="header">
+                <h1>League of Legends Profile Editor</h1>
+                <span>by OldPepper12</span>
+            </div>
+        );
+    }
+    makeMain() {
+        if (this.state.loading) {
+            return <div>Loading...</div>;
+        }
+
+        if (this.state.loggedIn) {
+            return (
+                <div>
+                    <div className="profile">
+                        <img className="pfp" src={this.state.pfp}></img>
+                        <div>
+                            <span className="display-name">{this.summonerInfo.displayName}</span>
+                            <br></br>
+                            <span className="sr-level">Level {this.summonerInfo.summonerLevel}</span>
+                        </div>
+                    </div>
+                    <IconDisplay icons={this.state.icons}></IconDisplay>
+                </div>
+            );
+        } else {
+            return <h2>You are not currently logged into the client!</h2>;
+        }
+    }
+    render() {
+        return (
+            <div>
+                {this.makeHeader()}
+                <div className="main">{this.makeMain()}</div>
+            </div>
+        );
+    }
+}
 
 export function App() {
-    return <div>hi</div>
+    return <AppMain></AppMain>;
 }

@@ -33,7 +33,7 @@ export class LCUInterface {
         }
 
         if (this.usingWSL) {
-            info("Windows WSL detected...");
+            warn("Windows WSL detected, WSL2 has been known to cause problems. If this is the case, try downgrading to WSL1 temporarily.");
         }
 
         // normalize path
@@ -111,6 +111,7 @@ export class LCUInterface {
             headers: { Authorization: this._makeAuthString(), "Content-Type": "application/json" },
             body: JSON.stringify(data),
         });
+        console.log(JSON.stringify(data));
         return await resp.json();
     }
 }

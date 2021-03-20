@@ -67,7 +67,7 @@ export class DataDragon {
         return icons;
     }
 
-    getSummonerIconURL(icon: SummonerIcon) {
-        return this.getVersionedCDN()+`img/profileicon/${icon.id}.png`
+    getSummonerIconURL(iconId: number | string) {
+        return this.getVersionedCDN()+`img/profileicon/${iconId}.png`
     }
 }

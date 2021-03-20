@@ -63,7 +63,10 @@ export default class LPEServer {
 
             res.json({
                 length: icons.length,
-                urls: icons.map((icon) => this.dataDragon.getSummonerIconURL(icon)),
+                urls: icons.map((icon) => ({
+                    id: icon.id,
+                    riotUrl: this.dataDragon.getSummonerIconURL(icon.id),
+                })),
             });
         });
 
@@ -83,11 +86,20 @@ export default class LPEServer {
             if (!id) {
                 return;
             }
-            console.log("changing icon to",id,"...")
+            console.log("changing icon to", id, "...");
             let resp = await this.lcu.apiPUT("/lol-summoner/v1/current-summoner/icon", {
-                profileIconId: Number.parseInt(id as string),
+                profileIconId: Number.parseInt(id as string)
+            });
+            // /lol-chat/v1/me/
+
+            resp = await this.lcu.apiPUT("/lol-chat/v1/me", {
+                icon: Number.parseInt(id as string),
             });
             res.json(resp);
+        });
+
+        this.app.use("/api/summoner-icon-url", async (req, res) => {
+            res.json({ url: this.dataDragon.getSummonerIconURL(req.query.id as string) });
         });
     }
 }
