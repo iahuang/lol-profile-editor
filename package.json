@@ -2,15 +2,21 @@
     "name": "lol-profile-editor",
     "version": "1.0.0",
     "dependencies": {
+        "@types/command-exists": "^1.2.0",
+        "@types/express": "^4.17.11",
+        "@types/node": "^14.14.35",
         "@types/node-fetch": "^2.5.8",
         "@types/react": "^17.0.3",
+        "command-exists": "^1.2.9",
+        "express": "^4.17.1",
         "fs-extra": "^9.1.0",
+        "is-docker": "^2.1.1",
         "node-fetch": "^2.6.1",
         "react": "^17.0.1"
     },
     "devDependencies": {},
     "scripts": {
-        "build-client": "tsc --project client \n node scripts/client_buildscript.js",
+        "build-client": "tsc --project client",
         "build-server": "tsc --project server",
         "cleanup": "rm -rf build",
         "start": "node build/server/main.js"

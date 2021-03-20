@@ -1,9 +1,4 @@
-import { DataDragon } from "./data_dragon";
+import LPEServer from "./server";
 
-async function main() {
-    let dataDragon = new DataDragon();
-    await dataDragon.useLatestGameVersion();
-    console.log(await dataDragon.getSummonerIcons())
-}
-
-main();
+let server = new LPEServer();
+server.start();

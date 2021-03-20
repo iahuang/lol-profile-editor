@@ -19,7 +19,7 @@
     </script>
     <script src="bundle.js"></script>
     <script>
-        requirejs(["app"]);
+        requirejs(["main"]);
         requirejs(["react", "react-dom"], function (React, ReactDOM) {
             ReactDOM.render(new window.client_AppConstructor(), document.getElementById("root"));
         });
