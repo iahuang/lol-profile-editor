@@ -4,6 +4,7 @@ import fs from "fs";
 import { DataDragon } from "./data_dragon";
 import { LCUInterface } from "./lcu_api";
 import { info, warn } from "./logging";
+import fetch from "node-fetch";
 
 class ServerConfig {
     installPath = "league_install_path_goes_here";
@@ -88,7 +89,7 @@ export default class LPEServer {
             }
             console.log("changing icon to", id, "...");
             let resp = await this.lcu.apiPUT("/lol-summoner/v1/current-summoner/icon", {
-                profileIconId: Number.parseInt(id as string)
+                profileIconId: Number.parseInt(id as string),
             });
             // /lol-chat/v1/me/
 
@@ -100,6 +101,41 @@ export default class LPEServer {
 
         this.app.use("/api/summoner-icon-url", async (req, res) => {
             res.json({ url: this.dataDragon.getSummonerIconURL(req.query.id as string) });
+        });
+
+        this.app.post("/api/change-background", async (req, res) => {
+            console.log(req.query);
+            let resp = await this.lcu.apiPOST("/lol-summoner/v1/current-summoner/summoner-profile/", {
+                key: "backgroundSkinId",
+                value: Number.parseInt(req.query.skinId as string),
+            });
+
+            res.json(resp);
+        });
+
+        this.app.use("/api/champions-list", async (req, res) => {
+            let resp = await this.dataDragon.getChampionDatabase();
+            res.json(Object.values(resp.data).map((champData: any)=>{
+                return {
+                    name: champData.name,
+                    id: champData.id,
+                    squareURL: this.dataDragon.championSquareURL(champData.id)
+                }
+            }));
+        });
+
+        this.app.use("/api/skins-for-champ", async (req, res) => {
+            let champId = req.query.id as string;
+            let champDB = await this.dataDragon.getChampionInfo(champId);
+            let skins = champDB.data[champId].skins;
+
+            res.json(
+                skins.map((skinData: any) => ({
+                    skinId: skinData.id,
+                    name: skinData.name,
+                    splashURL: this.dataDragon.getChampionSplashURL(champId, skinData.num),
+                }))
+            );
         });
     }
 }

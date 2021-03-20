@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { ChampionBackgroundSelector } from "./ChampionBackgroundSelect";
 import { Globals } from "./globals";
 import { IconDisplay } from "./IconDisplay";
 import { SummonerIcon } from "./types";
@@ -8,6 +9,7 @@ interface IState {
     loading: boolean;
     pfp: string;
     icons: SummonerIcon[];
+    champs: any[];
 }
 
 interface IProps {}
@@ -21,6 +23,7 @@ class AppMain extends Component<IProps, IState> {
             loading: true,
             pfp: "",
             icons: [],
+            champs: [],
         };
 
         Globals.server.apiGET("/api/is-logged-in").then((data) => {
@@ -50,8 +53,12 @@ class AppMain extends Component<IProps, IState> {
                     this.setState({
                         icons: data.urls,
                     });
-                    
-                    console.log(data);
+                });
+
+                Globals.server.apiGET("/api/champions-list").then((data) => {
+                    this.setState({
+                        champs: data,
+                    });
                 });
             }
         });
@@ -81,7 +88,10 @@ class AppMain extends Component<IProps, IState> {
                             <span className="sr-level">Level {this.summonerInfo.summonerLevel}</span>
                         </div>
                     </div>
-                    <IconDisplay icons={this.state.icons}></IconDisplay>
+                    <span className="selectors">
+                        <IconDisplay icons={this.state.icons}></IconDisplay>
+                        <ChampionBackgroundSelector championData={this.state.champs}></ChampionBackgroundSelector>
+                    </span>
                 </div>
             );
         } else {

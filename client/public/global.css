@@ -36,6 +36,8 @@ h1 {
 .pfp {
     border-radius: 100%;
     margin: 2vw;
+    width: 128px;
+    height: 128px;
 }
 
 .sr-level {
@@ -48,9 +50,38 @@ h1 {
     height: 64px;
     margin: 5px;
     cursor: pointer;
+    border-radius: 5px;
 }
 
 .sr-icon-display {
     height: 50vh;
     overflow-y: scroll;
+}
+
+.sr-champ-display {
+    height: 50vh;
+    overflow-y: scroll;
+}
+
+.champ-square {
+    width: 64px;
+    height: 64px;
+    margin: 5px;
+    cursor: pointer;
+}
+
+.selectors {
+    display: grid;
+    grid-template-columns: 50% 50%;
+}
+
+.skin-splash {
+    width: 100%;
+    border: 1px solid white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.skp-container {
+    padding: 10px;
 }

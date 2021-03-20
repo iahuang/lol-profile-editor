@@ -33,7 +33,9 @@ export class LCUInterface {
         }
 
         if (this.usingWSL) {
-            warn("Windows WSL detected, WSL2 has been known to cause problems. If this is the case, try downgrading to WSL1 temporarily.");
+            warn(
+                "Windows WSL detected, WSL2 has been known to cause problems. If this is the case, try downgrading to WSL1 temporarily."
+            );
         }
 
         // normalize path
@@ -48,24 +50,28 @@ export class LCUInterface {
 
         // find lockfile
         this._lockfilePath = path.join(installDir, "lockfile");
-        if (!fs.existsSync(this._lockfilePath)) {
-            warn("League Client is not open! Some functionality will be unavailable");
-        } else {
-            this.readClientCreds();
-        }
 
         // finish init
         this.installDir = installDir;
     }
 
-    getClientCreds() {
-        if (!this._lcuCreds) {
-            throw new Error("Cannot get League Client Credentials - Client is not open!");
+    getLockfileData() {
+        if (!fs.existsSync(this._lockfilePath)) {
+            return null;
+        } else {
+            return fs.readFileSync(this._lockfilePath);
         }
-        return this._lcuCreds;
     }
 
-    readClientCreds() {
+    getClientCreds() {
+        if (!this.isClientOpen()) {
+            throw new Error("Cannot get League Client Credentials - Client is not open!");
+        }
+        this._readClientCreds();
+        return this._lcuCreds!;
+    }
+
+    _readClientCreds() {
         let lfData = fs.readFileSync(this._lockfilePath, "utf8");
         let [procName, procID, port, pwd, pcl] = lfData.split(":");
 
@@ -79,7 +85,7 @@ export class LCUInterface {
     }
 
     isClientOpen() {
-        return Boolean(this._lcuCreds);
+        return Boolean(this.getLockfileData());
     }
 
     getAPIHost() {
@@ -108,6 +114,16 @@ export class LCUInterface {
     async apiPUT(endpoint: string, data: any) {
         let resp = await fetch(this.getAPIHost() + endpoint, {
             method: "PUT",
+            headers: { Authorization: this._makeAuthString(), "Content-Type": "application/json" },
+            body: JSON.stringify(data),
+        });
+        console.log(JSON.stringify(data));
+        return await resp.json();
+    }
+
+    async apiPOST(endpoint: string, data: any) {
+        let resp = await fetch(this.getAPIHost() + endpoint, {
+            method: "POST",
             headers: { Authorization: this._makeAuthString(), "Content-Type": "application/json" },
             body: JSON.stringify(data),
         });

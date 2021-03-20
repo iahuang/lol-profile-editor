@@ -43,8 +43,8 @@ export class DataDragon {
         return `http://ddragon.leagueoflegends.com/cdn/${this.gameVersion}/`;
     }
 
-    championSquareURL(championName: string) {
-        return this.getVersionedCDN()+"img/champion/"+championName+".png";
+    championSquareURL(id: string) {
+        return this.getVersionedCDN()+"img/champion/"+id+".png";
     }
 
     itemIconURL(id: string) {
@@ -69,5 +69,17 @@ export class DataDragon {
 
     getSummonerIconURL(iconId: number | string) {
         return this.getVersionedCDN()+`img/profileicon/${iconId}.png`
+    }
+
+    async getChampionDatabase(locale="en_US") {
+        return await loadJSON(this.getVersionedCDN()+`data/${locale}/champion.json`);
+    }
+
+    async getChampionInfo(id: string) {
+        return await loadJSON(this.getVersionedCDN()+`data/en_US/champion/${id}.json`);
+    }
+
+    getChampionSplashURL(champId: string, skinId=0) {
+        return `http://ddragon.leagueoflegends.com/cdn/img/champion/splash/${champId}_${skinId}.jpg`;
     }
 }
